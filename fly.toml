@@ -1,34 +1,8 @@
-app = "your-localai-app-name"
-primary_region = "iad" # Replace with your preferred Fly.io region
+app = "localai-fi-rc"
+primary_region = "cdg"
 
 [build]
-  image = "localai/localai:latest-cpu" # Use 'latest-gpu' if you provisioned a GPU machine
-
-[[mounts]]
-  source = "localai_data"
-  destination = "/build/models" # Default path inside LocalAI container for models
-  initial_size = "30gb"        # Scale this based on the sizes of models you intend to download
-
-[env]
-  MODELS_PATH = "/build/models"
-  THREADS = "4"                # Match this with your provisioned CPU count
-
-[[services]]
-  protocol = "tcp"
-  internal_port = 8080
-  processes = ["app"]
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-
-  [[services.http_checks]]
-    interval = "15s"
-    timeout = "2s"
-    method = "GET"
-    path = "/healthz"
+  # Forcing Go module behavior if buildpacks are being stubborn
+  [build.args]
+    GO111MODULE = "on"
 
