@@ -1,18 +1,14 @@
 services:
   - type: web
-    name: localai
-    env: docker
-    repo: https://github.com/mudler/LocalAI # Points Render directly to the source if deploying via Git, or read below
-    dockerImage: localai/localai:latest-cpu
-    plan: standard # AI requires hefty specs; upgrade plan according to budget
-    region: oregon
+    name: localai-fi-rc
+    env: go
+    # Force the build command to run where the actual main.go is
+    buildCommand: "cd $BUILD_DIR && go build -o app main.go"
+    # Start the compiled binary
+    startCommand: "./app"
     envVars:
-      - key: MODELS_PATH
-        value: /build/models
-      - key: THREADS
-        value: "4"
-    disk:
-      name: localai-models-storage
-      mountPath: /build/models
-      sizeGB: 50
+      - key: GO111MODULE
+        value: "on"
+      - key: GOPATH
+        value: "/opt/render/project/go"
 
