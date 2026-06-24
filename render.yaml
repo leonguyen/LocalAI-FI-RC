@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: localai
+    env: docker
+    repo: https://github.com/mudler/LocalAI # Points Render directly to the source if deploying via Git, or read below
+    dockerImage: localai/localai:latest-cpu
+    plan: standard # AI requires hefty specs; upgrade plan according to budget
+    region: oregon
+    envVars:
+      - key: MODELS_PATH
+        value: /build/models
+      - key: THREADS
+        value: "4"
+    disk:
+      name: localai-models-storage
+      mountPath: /build/models
+      sizeGB: 50
+
